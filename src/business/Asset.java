@@ -19,14 +19,14 @@ import java.nio.file.StandardOpenOption;
  *
  * @author oSlash
  */
-public class Asset {
+public abstract class Asset {
     
-    private String name, emsg;
-    private double cost, salvage;
-    private int life;
-    private boolean built;
-    private double[][] begbal, anndep, endbal;
-    private static final int SL = 0, DDL = 1;
+    protected String name, emsg;
+    protected double cost, salvage;
+    protected int life;
+    protected boolean built;
+    protected double[]begbal, anndep, endbal;
+    protected static final int SL = 0, DDL = 1;
     
     public Asset() {
         this.name = "";
@@ -43,11 +43,10 @@ public class Asset {
         this.salvage = salvage;
         this.life = life;
         
-        if (IsValid()) {
-            buildDep();
+        
         }
         
-    }
+    
     
     public String getName() {
         return name;
@@ -83,7 +82,7 @@ public class Asset {
     
     
 
-    private boolean IsValid() {
+    protected boolean IsValid() {
         this.emsg = "";
         if (this.name.trim().isEmpty()) {
             this.emsg += "Asset name is missing. ";
@@ -106,115 +105,33 @@ public class Asset {
         
     }
 
-    private void buildDep() {
-        try {
-        double annualdepSL = (this.cost - this.salvage) / life;
-        double rateDDL = (1.0 / this.life) * 2.0;
-        double wrkDDL = 0;
-        
-        begbal = new double[this.life][2];
-        anndep = new double[this.life][2];
-        endbal = new double[this.life][2];
-        
-        begbal[0][SL] = this.cost;
-        begbal[0][DDL] = this.cost;
-        
-        for (int i=0; i< this.life; i++) {
-            if (i > 0) {
-                begbal[i][SL] = endbal[i-1][SL];
-                begbal[i][DDL] = endbal[i-1][DDL];
-            }
-            
-            wrkDDL = begbal[i][DDL] * rateDDL;
-            if (wrkDDL < annualdepSL) {
-                wrkDDL = annualdepSL;
-            }
-            
-            //I like ternary, do you?
-            anndep[i][SL] = annualdepSL;
-            anndep[i][DDL] = (begbal[i][DDL] - wrkDDL) < 
-                    salvage ? begbal[i][DDL] - salvage : wrkDDL;
-            
-            
-            endbal[i][SL] = begbal[i][SL] - anndep[i][SL];
-            endbal[i][DDL] = (begbal[i][DDL] - wrkDDL) <
-                    salvage ? endbal[i][DDL] = salvage : 
-                    begbal[i][DDL] - wrkDDL;
-            
-            
-            }
-        
-        
-        
-        this.built = true;
-        }catch(Exception e) {
-            this.emsg = "Build error: " + e.getMessage();
-            this.built = false;
-            
-        }
-        
-    }
+    abstract void buildDep();
     
     public String getErrorMsg() {
         return this.emsg;
     }
     
-    public double AnnualDepreciation() {
-        if (!this.built) {
-            buildDep();
-            if (!this.built) {
-                return -1;
-            }
+    public double getAnnDep(int year) {
+        if (built) {
+            return anndep[year -1];
         }
-        return anndep[0][SL];
-    }
-    
-    
-    public double AnnualDepreciation(int year) {
-        if (!this.built) { 
-            buildDep();
-            if (!this.built) {
-                return -1;
-            }
-        }
-        return anndep[year-1][DDL];
-    }
-    
-    public double GetBegBalance(int year, String type) {
-        if (!this.built) {
-            buildDep();
-            if (!this.built) {
-                return -1;
-            }
-        }
-        if (year < 1 || year > this.life) {
+        else
+        {
             return -1;
         }
-        if (type.equalsIgnoreCase("S")) {
-            return begbal[year-1][SL];
-        }
-        else if (type.equalsIgnoreCase(("D"))){
-            return begbal[year-1][DDL];
+    }
+    
+    public double GetBegBalance(int year) {
+        if (built) {
+            return begbal[year -1];
         }
         else {
             return -1;
         }
     }
-    public double GetEndBalance(int year, String type) {
-        if (!this.built) {
-            buildDep();
-            if (!this.built) {
-                return -1;
-            }
-        }
-        if (year < 1 || year > this.life) {
-            return -1;
-        }
-        if (type.equalsIgnoreCase("S")) {
-            return endbal[year-1][SL];
-        }
-        else if (type.equalsIgnoreCase(("D"))){
-            return endbal[year-1][DDL];
+    public double GetEndBalance(int year) {
+        if (built) {
+            return endbal[year -1];
         }
         else {
             return -1;

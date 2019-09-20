@@ -4,7 +4,7 @@
 
 package depcalc;
 
-import business.Asset;
+import business.*;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.application.SingleFrameApplication;
@@ -364,7 +364,7 @@ public class DepCalcView extends FrameView {
         statusMessageLabel.setText("");
         double c, s;
         int lf;
-        String m;
+        DepreciationType t;
         if (jtxtAssetNm.getText().isEmpty()) {
             statusMessageLabel.setText("Please enter an asset description.");
             jtxtAssetNm.requestFocusInWindow();
@@ -395,18 +395,30 @@ public class DepCalcView extends FrameView {
         }
         
         if (jradSL.isSelected()){
-            m = "S";
+            t = DepreciationType.STRAIGHT_LINE;
         }
         else if (jradDDL.isSelected()) {
-            m = "D";
+            t = DepreciationType.DOUBLE_DECLINING;
         }
         else {
             statusMessageLabel.setText("No depreciation method selected.");
             return;
         }
         
-        
-        asset = new Asset(jtxtAssetNm.getText(), c, s, lf);
+        switch (t) {
+            case STRAIGHT_LINE:
+                asset = new AssetSL(jtxtAssetNm.getText(), c, s, lf);
+                break;
+            case DOUBLE_DECLINING:
+                asset = new AssetDDL(jtxtAssetNm.getText(), c, s, lf);
+                break;
+            case DOUBLE_DECLINING_1_5:
+                asset = new AssetDDL15(jtxtAssetNm.getText(), c, s, lf);
+                break;
+            default:
+                break;
+                 
+        }
         if (!asset.getErrorMsg().isEmpty()) {
             statusMessageLabel.setText(asset.getErrorMsg());
             return;
@@ -431,14 +443,9 @@ public class DepCalcView extends FrameView {
         
         for (int i=1; i <= asset.getLife(); i++) {
             jtblSched.setValueAt(i, (i-1), 0);
-            jtblSched.setValueAt(currFormat.format(asset.GetBegBalance(i,m)), (i-1), 1);
-            if (m.equalsIgnoreCase("S")) {
-                jtblSched.setValueAt(currFormat.format(asset.AnnualDepreciation()), (i-1), 2);
-            }
-            else {
-                jtblSched.setValueAt(currFormat.format(asset.AnnualDepreciation(i)), (i-1), 2);
-            }
-            jtblSched.setValueAt(currFormat.format(asset.GetEndBalance(i,m)), (i-1), 3);
+            jtblSched.setValueAt(currFormat.format(asset.GetBegBalance(i)), (i-1), 1);
+            jtblSched.setValueAt(currFormat.format(asset.getAnnDep(i)), (i-1), 2);
+            jtblSched.setValueAt(currFormat.format(asset.GetEndBalance(i)), (i-1), 3);
     }
         
         
