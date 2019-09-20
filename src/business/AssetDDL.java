@@ -21,10 +21,10 @@ public class AssetDDL extends Asset {
         }
     }
 
-    void buildDep(double rate) {
+    void buildDep(double r) {
         try {
         double annualdepSL = (this.cost - this.salvage) / life;
-        double rateDDL = rate;
+        double rateDDL = (1.0 / this.life) * r;
         double wrkDDL = 0;
         
         begbal = new double[life];

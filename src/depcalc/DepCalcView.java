@@ -129,6 +129,7 @@ public class DepCalcView extends FrameView {
         jbtnCalc = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtblSched = new javax.swing.JTable();
+        jradDDL15 = new javax.swing.JRadioButton();
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         jmnuSave = new javax.swing.JMenuItem();
@@ -213,6 +214,10 @@ public class DepCalcView extends FrameView {
         jtblSched.setName("jtblSched"); // NOI18N
         jScrollPane1.setViewportView(jtblSched);
 
+        buttonGroup1.add(jradDDL15);
+        jradDDL15.setText(resourceMap.getString("jradDDL15.text")); // NOI18N
+        jradDDL15.setName("jradDDL15"); // NOI18N
+
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
@@ -224,27 +229,21 @@ public class DepCalcView extends FrameView {
                     .addComponent(jtxtAssetNm, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jtxtCost, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addGap(18, 18, 18)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jtxtCost, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2))
-                        .addGap(18, 18, 18)
-                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(mainPanelLayout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel4))
-                            .addGroup(mainPanelLayout.createSequentialGroup()
-                                .addComponent(jtxtSalvage, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jtxtLife, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jbtnClear))))
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel4))
                     .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addComponent(jradSL)
+                        .addComponent(jtxtSalvage, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jradDDL)))
-                .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(jtxtLife, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jbtnClear)))
+                .addGap(0, 75, Short.MAX_VALUE))
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -256,8 +255,17 @@ public class DepCalcView extends FrameView {
                         .addContainerGap())))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jbtnCalc)
-                .addGap(225, 225, 225))
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
+                        .addComponent(jbtnCalc)
+                        .addGap(225, 225, 225))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
+                        .addComponent(jradSL)
+                        .addGap(18, 18, 18)
+                        .addComponent(jradDDL)
+                        .addGap(18, 18, 18)
+                        .addComponent(jradDDL15)
+                        .addGap(64, 64, 64))))
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -280,12 +288,13 @@ public class DepCalcView extends FrameView {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jradSL)
-                    .addComponent(jradDDL))
+                    .addComponent(jradDDL)
+                    .addComponent(jradDDL15))
                 .addGap(6, 6, 6)
                 .addComponent(jbtnCalc)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(44, Short.MAX_VALUE))
+                .addContainerGap(43, Short.MAX_VALUE))
         );
 
         menuBar.setName("menuBar"); // NOI18N
@@ -400,6 +409,9 @@ public class DepCalcView extends FrameView {
         else if (jradDDL.isSelected()) {
             t = DepreciationType.DOUBLE_DECLINING;
         }
+        else if (jradDDL15.isSelected()) {
+            t = DepreciationType.DOUBLE_DECLINING_1_5;
+        }
         else {
             statusMessageLabel.setText("No depreciation method selected.");
             return;
@@ -499,6 +511,7 @@ public class DepCalcView extends FrameView {
     private javax.swing.JButton jbtnClear;
     private javax.swing.JMenuItem jmnuSave;
     private javax.swing.JRadioButton jradDDL;
+    private javax.swing.JRadioButton jradDDL15;
     private javax.swing.JRadioButton jradSL;
     private javax.swing.JTable jtblSched;
     private javax.swing.JTextField jtxtAssetNm;
