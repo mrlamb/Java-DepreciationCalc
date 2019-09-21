@@ -33,7 +33,7 @@ import javax.swing.table.TableCellRenderer;
 public class DepInheritView extends FrameView {
     AssetSL asl;
     AssetDDL addl;
-    AssetDDL15 addl15;
+    AssetDL15 addl15;
     Asset asset;
 
     public DepInheritView(SingleFrameApplication app) {
@@ -413,7 +413,7 @@ public class DepInheritView extends FrameView {
             t = DepreciationType.DOUBLE_DECLINING;
         }
         else if (jradDDL15.isSelected()) {
-            t = DepreciationType.DOUBLE_DECLINING_1_5;
+            t = DepreciationType.DECLINING_1_5;
         }
         else {
             statusMessageLabel.setText("No depreciation method selected.");
@@ -467,8 +467,8 @@ public class DepInheritView extends FrameView {
                    jtblSched.setValueAt(currFormat.format(addl.GetEndBalance(i)), (i-1), 3);
                 }
                 break;
-            case DOUBLE_DECLINING_1_5:
-                addl15 = new AssetDDL15(jtxtAssetNm.getText(), c, s, lf);
+            case DECLINING_1_5:
+                addl15 = new AssetDL15(jtxtAssetNm.getText(), c, s, lf);
                 if (!addl15.getErrorMsg().isEmpty()) {
                     statusMessageLabel.setText(asl.getErrorMsg());
                     return;

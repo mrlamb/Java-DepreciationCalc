@@ -9,11 +9,11 @@ package business;
  *
  * @author oSlash
  */
-public class AssetDDL15 extends AssetDDL
+public class AssetDL15 extends AssetDL
 {
     private final double rate;
 
-    public AssetDDL15(String text, double c, double s, int lf) {
+    public AssetDL15(String text, double c, double s, int lf) {
         super(text, c, s, lf);
         this.rate = 1.5;
         if (super.IsValid()) {
