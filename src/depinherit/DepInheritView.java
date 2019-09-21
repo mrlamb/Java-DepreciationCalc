@@ -2,7 +2,7 @@
  * DepCalcViewView.java
  */
 
-package depcalc;
+package depinherit;
 
 import business.*;
 import org.jdesktop.application.Action;
@@ -30,10 +30,13 @@ import javax.swing.table.TableCellRenderer;
 /**
  * The application's main frame.
  */
-public class DepCalcView extends FrameView {
+public class DepInheritView extends FrameView {
+    AssetSL asl;
+    AssetDDL addl;
+    AssetDDL15 addl15;
     Asset asset;
 
-    public DepCalcView(SingleFrameApplication app) {
+    public DepInheritView(SingleFrameApplication app) {
         super(app);
 
         initComponents();
@@ -97,11 +100,11 @@ public class DepCalcView extends FrameView {
     @Action
     public void showAboutBox() {
         if (aboutBox == null) {
-            JFrame mainFrame = DepCalcApp.getApplication().getMainFrame();
-            aboutBox = new DepCalcAboutBox(mainFrame);
+            JFrame mainFrame = DepInheritApp.getApplication().getMainFrame();
+            aboutBox = new DepInheritAboutBox(mainFrame);
             aboutBox.setLocationRelativeTo(mainFrame);
         }
-        DepCalcApp.getApplication().show(aboutBox);
+        DepInheritApp.getApplication().show(aboutBox);
     }
 
     /** This method is called from within the constructor to
@@ -145,7 +148,7 @@ public class DepCalcView extends FrameView {
 
         mainPanel.setName("mainPanel"); // NOI18N
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(depcalc.DepCalcApp.class).getContext().getResourceMap(DepCalcView.class);
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(depinherit.DepInheritApp.class).getContext().getResourceMap(DepInheritView.class);
         jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
 
@@ -311,7 +314,7 @@ public class DepCalcView extends FrameView {
         });
         fileMenu.add(jmnuSave);
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(depcalc.DepCalcApp.class).getContext().getActionMap(DepCalcView.class, this);
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(depinherit.DepInheritApp.class).getContext().getActionMap(DepInheritView.class, this);
         exitMenuItem.setAction(actionMap.get("quit")); // NOI18N
         exitMenuItem.setName("exitMenuItem"); // NOI18N
         fileMenu.add(exitMenuItem);
@@ -417,28 +420,9 @@ public class DepCalcView extends FrameView {
             return;
         }
         
-        switch (t) {
-            case STRAIGHT_LINE:
-                asset = new AssetSL(jtxtAssetNm.getText(), c, s, lf);
-                break;
-            case DOUBLE_DECLINING:
-                asset = new AssetDDL(jtxtAssetNm.getText(), c, s, lf);
-                break;
-            case DOUBLE_DECLINING_1_5:
-                asset = new AssetDDL15(jtxtAssetNm.getText(), c, s, lf);
-                break;
-            default:
-                break;
-                 
-        }
-        if (!asset.getErrorMsg().isEmpty()) {
-            statusMessageLabel.setText(asset.getErrorMsg());
-            return;
-        }
-        
         
         String cols[] = {"Year", "Beg.Bal.", "Ann.Dep.", "End Bal."};
-        String[][] table = new String[asset.getLife()][4];
+        String[][] table = new String[lf][4];
         DefaultTableModel mod = new DefaultTableModel(table, cols);
         
         jtblSched.setModel(mod);
@@ -447,21 +431,60 @@ public class DepCalcView extends FrameView {
         DefaultTableCellRenderer rend = new DefaultTableCellRenderer();
         rend.setHorizontalAlignment(DefaultTableCellRenderer.RIGHT);
         
-        
         for (int i=1; i < 4; i++) {
             jtblSched.getColumnModel().getColumn(i).setCellRenderer(rend);
             
         }
         
-        for (int i=1; i <= asset.getLife(); i++) {
-            jtblSched.setValueAt(i, (i-1), 0);
-            jtblSched.setValueAt(currFormat.format(asset.GetBegBalance(i)), (i-1), 1);
-            jtblSched.setValueAt(currFormat.format(asset.getAnnDep(i)), (i-1), 2);
-            jtblSched.setValueAt(currFormat.format(asset.GetEndBalance(i)), (i-1), 3);
-    }
+        //Instantiating an Asset so that my save function doesn't break. 
+        //Could use polymorphism here instead.
+        asset = new Asset(jtxtAssetNm.getText(), c, s, lf);
         
-        
-        
+        switch (t) {
+            case STRAIGHT_LINE:
+                asl = new AssetSL(jtxtAssetNm.getText(), c, s, lf);
+                if (!asl.getErrorMsg().isEmpty()) {
+                    statusMessageLabel.setText(asl.getErrorMsg());
+                    return;
+                }
+                for (int i=1; i <= asl.getLife(); i++) {
+                   jtblSched.setValueAt(i, (i-1), 0);
+                   jtblSched.setValueAt(currFormat.format(asl.GetBegBalance(i)), (i-1), 1);
+                   jtblSched.setValueAt(currFormat.format(asl.getAnnDep()), (i-1), 2);
+                   jtblSched.setValueAt(currFormat.format(asl.GetEndBalance(i)), (i-1), 3);
+                }
+                break;
+            case DOUBLE_DECLINING:
+                addl = new AssetDDL(jtxtAssetNm.getText(), c, s, lf);
+                if (!addl.getErrorMsg().isEmpty()) {
+                    statusMessageLabel.setText(asl.getErrorMsg());
+                    return;
+                }
+                for (int i=1; i <= addl.getLife(); i++) {
+                   jtblSched.setValueAt(i, (i-1), 0);
+                   jtblSched.setValueAt(currFormat.format(addl.GetBegBalance(i)), (i-1), 1);
+                   jtblSched.setValueAt(currFormat.format(addl.getAnnDep(i)), (i-1), 2);
+                   jtblSched.setValueAt(currFormat.format(addl.GetEndBalance(i)), (i-1), 3);
+                }
+                break;
+            case DOUBLE_DECLINING_1_5:
+                addl15 = new AssetDDL15(jtxtAssetNm.getText(), c, s, lf);
+                if (!addl15.getErrorMsg().isEmpty()) {
+                    statusMessageLabel.setText(asl.getErrorMsg());
+                    return;
+                }
+                for (int i=1; i <= addl15.getLife(); i++) {
+                   jtblSched.setValueAt(i, (i-1), 0);
+                   jtblSched.setValueAt(currFormat.format(addl15.GetBegBalance(i)), (i-1), 1);
+                   jtblSched.setValueAt(currFormat.format(addl15.getAnnDep(i)), (i-1), 2);
+                   jtblSched.setValueAt(currFormat.format(addl15.GetEndBalance(i)), (i-1), 3);
+                }
+                break;
+            default:
+                //Should be unreachable
+                break;
+                 
+        }
     }//GEN-LAST:event_jbtnCalcActionPerformed
 
     private void jbtnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnClearActionPerformed
@@ -474,8 +497,10 @@ public class DepCalcView extends FrameView {
             dm.removeRow(0);
         }
         
-        
         asset = null;
+        asl = null;
+        addl = null;
+        addl15 = null;
     }//GEN-LAST:event_jbtnClearActionPerformed
 
     private void jmnuSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmnuSaveActionPerformed
@@ -494,6 +519,7 @@ public class DepCalcView extends FrameView {
             if (!filePath.endsWith(".txt")) {
                 selectedFile = new File(filePath + ".txt");
             }
+            
             asset.setSave(selectedFile);
         }
         

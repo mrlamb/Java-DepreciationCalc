@@ -12,28 +12,31 @@ package business;
 public class AssetDDL extends Asset {
 
     private final double rate;
+    private double[] begbal, endbal, anndep;
+    private boolean built;
+    
     public AssetDDL(String text, double c, double s, int lf) {
         super(text, c, s, lf);
         this.rate = 2.0;
         
         if (super.IsValid()) {
-            buildDep();
+            buildDep(rate);
         }
     }
 
     void buildDep(double r) {
         try {
-        double annualdepSL = (this.cost - this.salvage) / life;
-        double rateDDL = (1.0 / this.life) * r;
+        double annualdepSL = (getCost() - getSalvage()) / getLife();
+        double rateDDL = (1.0 / this.getLife()) * r;
         double wrkDDL = 0;
         
-        begbal = new double[life];
-        anndep = new double[life];
-        endbal = new double[life];
+        begbal = new double[getLife()];
+        anndep = new double[getLife()];
+        endbal = new double[getLife()];
         
-        begbal[0] = this.cost;
+        begbal[0] = getCost();
         
-        for (int i=0; i< this.life; i++) {
+        for (int i=0; i< getLife(); i++) {
             if (i > 0) {
                 begbal[i] = endbal[i-1];
             }
@@ -44,27 +47,61 @@ public class AssetDDL extends Asset {
             }
             
             anndep[i] = (begbal[i] - wrkDDL) < 
-                    salvage ? begbal[i] - salvage : wrkDDL;
+                    getSalvage() ? begbal[i] - getSalvage() : wrkDDL;
             
             
             endbal[i] = (begbal[i] - wrkDDL) <
-                    salvage ? endbal[i] = salvage : 
+                    getSalvage() ? endbal[i] = getSalvage() : 
                     begbal[i] - wrkDDL;
             
             
             }
         this.built = true;
         }catch(Exception e) {
-            this.emsg = "Build error: " + e.getMessage();
+            setErrorMsg("Build error: " + e.getMessage());
             this.built = false;
             
         }
         
     }
 
-    @Override
-    void buildDep() {
-        buildDep(rate);
+    public double getAnnDep(int year) {
+        if (!built) {
+            buildDep(rate);
+            if (!built) {
+                return -1;
+            }
+        }
+        if (year < 1 || year > getLife()) {
+            return -1;
+        }
+        
+        return anndep[year - 1];
+    }
+    
+    public double GetBegBalance(int year) {
+        if (!built) {
+            buildDep(rate);
+            if (!built) {
+                return -1;
+            }
+        }
+        if (year < 1 || year > getLife()) {
+            return -1;
+        }
+        return begbal[year -1];
+    }
+    public double GetEndBalance(int year) {
+        if (!built) {
+            buildDep(rate);
+            if (!built) {
+                return -1;
+            }
+        }
+        if (year < 1 || year > getLife()) {
+            return -1;
+        }
+        return endbal[year-1];
     }
     
 }

@@ -2,13 +2,13 @@
  * DepCalcViewAboutBox.java
  */
 
-package depcalc;
+package depinherit;
 
 import org.jdesktop.application.Action;
 
-public class DepCalcAboutBox extends javax.swing.JDialog {
+public class DepInheritAboutBox extends javax.swing.JDialog {
 
-    public DepCalcAboutBox(java.awt.Frame parent) {
+    public DepInheritAboutBox(java.awt.Frame parent) {
         super(parent);
         initComponents();
         getRootPane().setDefaultButton(closeButton);
@@ -38,13 +38,13 @@ public class DepCalcAboutBox extends javax.swing.JDialog {
         javax.swing.JLabel imageLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(depcalc.DepCalcApp.class).getContext().getResourceMap(DepCalcAboutBox.class);
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(depinherit.DepInheritApp.class).getContext().getResourceMap(DepInheritAboutBox.class);
         setTitle(resourceMap.getString("title")); // NOI18N
         setModal(true);
         setName("aboutBox"); // NOI18N
         setResizable(false);
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(depcalc.DepCalcApp.class).getContext().getActionMap(DepCalcAboutBox.class, this);
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(depinherit.DepInheritApp.class).getContext().getActionMap(DepInheritAboutBox.class, this);
         closeButton.setAction(actionMap.get("closeAboutBox")); // NOI18N
         closeButton.setName("closeButton"); // NOI18N
 

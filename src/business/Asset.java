@@ -6,34 +6,25 @@
 package business;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 
 /**
  *
  * @author oSlash
  */
-public abstract class Asset {
+public class Asset {
     
-    protected String name, emsg;
-    protected double cost, salvage;
-    protected int life;
-    protected boolean built;
-    protected double[]begbal, anndep, endbal;
-    protected static final int SL = 0, DDL = 1;
+    private String name, emsg;
+    private double cost, salvage;
+    private int life;
     
     public Asset() {
         this.name = "";
         this.cost = 0;
         this.salvage = 0;
         this.life = 0;
-        this.built = false;
+        
     }
     
     
@@ -43,10 +34,7 @@ public abstract class Asset {
         this.salvage = salvage;
         this.life = life;
         
-        
-        }
-        
-    
+    }
     
     public String getName() {
         return name;
@@ -104,38 +92,13 @@ public abstract class Asset {
         
         
     }
-
-    abstract void buildDep();
     
     public String getErrorMsg() {
         return this.emsg;
     }
     
-    public double getAnnDep(int year) {
-        if (built) {
-            return anndep[year -1];
-        }
-        else
-        {
-            return -1;
-        }
-    }
-    
-    public double GetBegBalance(int year) {
-        if (built) {
-            return begbal[year -1];
-        }
-        else {
-            return -1;
-        }
-    }
-    public double GetEndBalance(int year) {
-        if (built) {
-            return endbal[year -1];
-        }
-        else {
-            return -1;
-        }
+    protected void setErrorMsg(String emsg) {
+        this.emsg = emsg;
     }    
 
     public void setSave(File selectedFile) {

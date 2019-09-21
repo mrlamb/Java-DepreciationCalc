@@ -11,40 +11,76 @@ package business;
  */
 public class AssetSL extends Asset {
     
+    private boolean built;
+    private double[] begbal, endbal;
+    private double anndep;
+    
+    
     public AssetSL(String name, double cost, double salvage, int life) {
         super(name, cost, salvage, life);
         
         
-        if (super.IsValid()) {
+        if (IsValid()) {
+        } else {
             buildDep();
         }
     }
-
-
-    @Override
     void buildDep() {
-        double annualdepSL = (cost - salvage) / life;
+        anndep = (getCost() - getSalvage()) / getLife();
         try {
-            begbal = new double[life];
-            endbal = new double[life];
-            anndep = new double[life];
+            begbal = new double[getLife()];
+            endbal = new double[getLife()];
+            
             
             begbal[0] = this.getCost();
             
-            for (int i=0; i < life; i++) {
+            for (int i=0; i < getLife(); i++) {
             if (i > 0) {
                 begbal[i] = endbal[i-1];
             }
-            anndep[i] = annualdepSL;
-            endbal[i] = begbal[i] - anndep[i];
+            endbal[i] = begbal[i] - anndep;
             }
             built = true;
             
         }
         catch(Exception e) {
-            emsg = "Build error: " + e.getMessage();
+            setErrorMsg("Build error: " + e.getMessage());
             built = false;
             
         }
+    }
+    public double getAnnDep() {
+        if (!built) {
+            buildDep();
+            if (!built) {
+                return -1;
+            }
+        }
+        return anndep;
+    }
+    
+    public double GetBegBalance(int year) {
+        if (!built) {
+            buildDep();
+            if (!built) {
+                return -1;
+            }
+        }
+        if (year < 1 || year > getLife()) {
+            return -1;
+        }
+        return begbal[year -1];
+    }
+    public double GetEndBalance(int year) {
+        if (!built) {
+            buildDep();
+            if (!built) {
+                return -1;
+            }
+        }
+        if (year < 1 || year > getLife()) {
+            return -1;
+        }
+        return endbal[year-1];
     }
 }

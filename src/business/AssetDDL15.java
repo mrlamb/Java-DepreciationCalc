@@ -17,13 +17,7 @@ public class AssetDDL15 extends AssetDDL
         super(text, c, s, lf);
         this.rate = 1.5;
         if (super.IsValid()) {
-            buildDep();
+            super.buildDep(rate);
         }
-    }
-
-    @Override
-    final void buildDep() {
-        super.buildDep(rate);
-    }
-    
+    }    
 }
