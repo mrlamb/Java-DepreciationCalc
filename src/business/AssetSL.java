@@ -49,7 +49,8 @@ public class AssetSL extends Asset {
             
         }
     }
-    public double getAnnDep() {
+    @Override
+    public double getAnnDep(int year) {
         if (!built) {
             buildDep();
             if (!built) {
@@ -59,6 +60,7 @@ public class AssetSL extends Asset {
         return anndep;
     }
     
+    @Override
     public double GetBegBalance(int year) {
         if (!built) {
             buildDep();
@@ -71,6 +73,7 @@ public class AssetSL extends Asset {
         }
         return begbal[year -1];
     }
+    @Override
     public double GetEndBalance(int year) {
         if (!built) {
             buildDep();

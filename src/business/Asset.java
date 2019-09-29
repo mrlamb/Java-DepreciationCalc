@@ -13,7 +13,7 @@ import java.io.PrintWriter;
  *
  * @author oSlash
  */
-public class Asset {
+public abstract class Asset {
     
     private String name, emsg;
     private double cost, salvage;
@@ -121,4 +121,9 @@ public class Asset {
             e.printStackTrace();
         }
     }
+    public abstract double getAnnDep(int year);
+    public abstract double GetBegBalance(int year);
+    public abstract double GetEndBalance(int year);
+    
+    
 }

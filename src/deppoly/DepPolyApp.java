@@ -2,7 +2,7 @@
  * DepCalcViewApp.java
  */
 
-package depinherit;
+package deppoly;
 
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
@@ -10,13 +10,13 @@ import org.jdesktop.application.SingleFrameApplication;
 /**
  * The main class of the application.
  */
-public class DepInheritApp extends SingleFrameApplication {
+public class DepPolyApp extends SingleFrameApplication {
 
     /**
      * At startup create and show the main frame of the application.
      */
     @Override protected void startup() {
-        show(new DepInheritView(this));
+        show(new DepPolyView(this));
     }
 
     /**
@@ -31,14 +31,14 @@ public class DepInheritApp extends SingleFrameApplication {
      * A convenient static getter for the application instance.
      * @return the instance of DepCalcViewApp
      */
-    public static DepInheritApp getApplication() {
-        return Application.getInstance(DepInheritApp.class);
+    public static DepPolyApp getApplication() {
+        return Application.getInstance(DepPolyApp.class);
     }
 
     /**
      * Main method launching the application.
      */
     public static void main(String[] args) {
-        launch(DepInheritApp.class, args);
+        launch(DepPolyApp.class, args);
     }
 }

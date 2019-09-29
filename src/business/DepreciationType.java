@@ -12,6 +12,7 @@ package business;
 public enum DepreciationType {
     STRAIGHT_LINE,
     DOUBLE_DECLINING,
-    DECLINING_1_5
+    DECLINING_1_5, 
+    SUM_YEARS_DIGITS
     
 }

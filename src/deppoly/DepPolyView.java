@@ -2,9 +2,10 @@
  * DepCalcViewView.java
  */
 
-package depinherit;
+package deppoly;
 
 import business.*;
+import java.awt.Dimension;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.application.SingleFrameApplication;
@@ -21,6 +22,7 @@ import javax.swing.Icon;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JViewport;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -30,13 +32,11 @@ import javax.swing.table.TableCellRenderer;
 /**
  * The application's main frame.
  */
-public class DepInheritView extends FrameView {
-    AssetSL asl;
-    AssetDDL addl;
-    AssetDL15 addl15;
-    Asset asset;
+public class DepPolyView extends FrameView {
+    Asset a;
+    
 
-    public DepInheritView(SingleFrameApplication app) {
+    public DepPolyView(SingleFrameApplication app) {
         super(app);
 
         initComponents();
@@ -100,11 +100,11 @@ public class DepInheritView extends FrameView {
     @Action
     public void showAboutBox() {
         if (aboutBox == null) {
-            JFrame mainFrame = DepInheritApp.getApplication().getMainFrame();
-            aboutBox = new DepInheritAboutBox(mainFrame);
+            JFrame mainFrame = DepPolyApp.getApplication().getMainFrame();
+            aboutBox = new DepPolyAboutBox(mainFrame);
             aboutBox.setLocationRelativeTo(mainFrame);
         }
-        DepInheritApp.getApplication().show(aboutBox);
+        DepPolyApp.getApplication().show(aboutBox);
     }
 
     /** This method is called from within the constructor to
@@ -133,6 +133,7 @@ public class DepInheritView extends FrameView {
         jScrollPane1 = new javax.swing.JScrollPane();
         jtblSched = new javax.swing.JTable();
         jradDDL15 = new javax.swing.JRadioButton();
+        jradSYD = new javax.swing.JRadioButton();
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         jmnuSave = new javax.swing.JMenuItem();
@@ -148,7 +149,7 @@ public class DepInheritView extends FrameView {
 
         mainPanel.setName("mainPanel"); // NOI18N
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(depinherit.DepInheritApp.class).getContext().getResourceMap(DepInheritView.class);
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(deppoly.DepPolyApp.class).getContext().getResourceMap(DepPolyView.class);
         jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
 
@@ -221,54 +222,61 @@ public class DepInheritView extends FrameView {
         jradDDL15.setText(resourceMap.getString("jradDDL15.text")); // NOI18N
         jradDDL15.setName("jradDDL15"); // NOI18N
 
+        buttonGroup1.add(jradSYD);
+        jradSYD.setText(resourceMap.getString("jradSYD.text")); // NOI18N
+        jradSYD.setName("jradSYD"); // NOI18N
+
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(mainPanelLayout.createSequentialGroup()
-                .addGap(89, 89, 89)
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jtxtAssetNm, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jtxtCost, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addGap(18, 18, 18)
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel4))
-                    .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addComponent(jtxtSalvage, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jtxtLife, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jbtnClear)))
-                .addGap(0, 75, Short.MAX_VALUE))
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addGap(207, 207, 207))
-                    .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
+                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 540, Short.MAX_VALUE)
+                            .addGroup(mainPanelLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jbtnCalc)
+                                .addGap(223, 223, 223)))
                         .addContainerGap())))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
-                        .addComponent(jbtnCalc)
-                        .addGap(225, 225, 225))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
-                        .addComponent(jradSL)
+            .addGroup(mainPanelLayout.createSequentialGroup()
+                .addGap(89, 89, 89)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(mainPanelLayout.createSequentialGroup()
+                            .addComponent(jradDDL15)
+                            .addGap(18, 18, 18)
+                            .addComponent(jradSYD))
+                        .addGroup(mainPanelLayout.createSequentialGroup()
+                            .addComponent(jradSL)
+                            .addGap(64, 64, 64)
+                            .addComponent(jradDDL)))
+                    .addGroup(mainPanelLayout.createSequentialGroup()
+                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jtxtAssetNm, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addComponent(jradDDL)
+                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jtxtCost, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2))
                         .addGap(18, 18, 18)
-                        .addComponent(jradDDL15)
-                        .addGap(64, 64, 64))))
+                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(mainPanelLayout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel4))
+                            .addGroup(mainPanelLayout.createSequentialGroup()
+                                .addComponent(jtxtSalvage, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jtxtLife, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jbtnClear)))))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -288,16 +296,19 @@ public class DepInheritView extends FrameView {
                     .addComponent(jbtnClear))
                 .addGap(37, 37, 37)
                 .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jradSL)
-                    .addComponent(jradDDL)
-                    .addComponent(jradDDL15))
-                .addGap(6, 6, 6)
+                    .addComponent(jradDDL))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jradDDL15)
+                    .addComponent(jradSYD))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                 .addComponent(jbtnCalc)
-                .addGap(18, 18, 18)
+                .addGap(33, 33, 33)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(43, Short.MAX_VALUE))
+                .addGap(53, 53, 53))
         );
 
         menuBar.setName("menuBar"); // NOI18N
@@ -314,7 +325,7 @@ public class DepInheritView extends FrameView {
         });
         fileMenu.add(jmnuSave);
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(depinherit.DepInheritApp.class).getContext().getActionMap(DepInheritView.class, this);
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(deppoly.DepPolyApp.class).getContext().getActionMap(DepPolyView.class, this);
         exitMenuItem.setAction(actionMap.get("quit")); // NOI18N
         exitMenuItem.setName("exitMenuItem"); // NOI18N
         fileMenu.add(exitMenuItem);
@@ -345,11 +356,11 @@ public class DepInheritView extends FrameView {
         statusPanel.setLayout(statusPanelLayout);
         statusPanelLayout.setHorizontalGroup(
             statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(statusPanelSeparator, javax.swing.GroupLayout.DEFAULT_SIZE, 532, Short.MAX_VALUE)
+            .addComponent(statusPanelSeparator, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
             .addGroup(statusPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(statusMessageLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 362, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 390, Short.MAX_VALUE)
                 .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(statusAnimationLabel)
@@ -415,76 +426,103 @@ public class DepInheritView extends FrameView {
         else if (jradDDL15.isSelected()) {
             t = DepreciationType.DECLINING_1_5;
         }
+        else if (jradSYD.isSelected()) {
+            t = DepreciationType.SUM_YEARS_DIGITS;
+        }
         else {
             statusMessageLabel.setText("No depreciation method selected.");
             return;
         }
         
+        switch (t) {
+            case STRAIGHT_LINE:
+                a = new AssetSL(jtxtAssetNm.getText(), c, s, lf);
+                break;
+            case DOUBLE_DECLINING:
+                a = new AssetDDL(jtxtAssetNm.getText(), c, s, lf);
+                break;
+            case DECLINING_1_5:
+                a = new AssetDL15(jtxtAssetNm.getText(), c, s, lf);
+                break;   
+            case SUM_YEARS_DIGITS:
+                a = new AssetSYD(jtxtAssetNm.getText(), c, s, lf);
+        }
+        if (!a.getErrorMsg().isEmpty()) {
+            statusMessageLabel.setText(a.getErrorMsg());
+            return;
+        }
+
         
-        String cols[] = {"Year", "Beg.Bal.", "Ann.Dep.", "End Bal."};
-        String[][] table = new String[lf][4];
-        DefaultTableModel mod = new DefaultTableModel(table, cols);
-        
-        jtblSched.setModel(mod);
         
         NumberFormat currFormat = NumberFormat.getCurrencyInstance();
         DefaultTableCellRenderer rend = new DefaultTableCellRenderer();
         rend.setHorizontalAlignment(DefaultTableCellRenderer.RIGHT);
         
-        for (int i=1; i < 4; i++) {
-            jtblSched.getColumnModel().getColumn(i).setCellRenderer(rend);
-            
-        }
+
         
-        //Instantiating an Asset so that my save function doesn't break. 
-        //Could use polymorphism here instead.
-        asset = new Asset(jtxtAssetNm.getText(), c, s, lf);
-        
-        switch (t) {
+        switch(t) {
             case STRAIGHT_LINE:
-                asl = new AssetSL(jtxtAssetNm.getText(), c, s, lf);
-                if (!asl.getErrorMsg().isEmpty()) {
-                    statusMessageLabel.setText(asl.getErrorMsg());
-                    return;
-                }
-                for (int i=1; i <= asl.getLife(); i++) {
-                   jtblSched.setValueAt(i, (i-1), 0);
-                   jtblSched.setValueAt(currFormat.format(asl.GetBegBalance(i)), (i-1), 1);
-                   jtblSched.setValueAt(currFormat.format(asl.getAnnDep()), (i-1), 2);
-                   jtblSched.setValueAt(currFormat.format(asl.GetEndBalance(i)), (i-1), 3);
-                }
-                break;
             case DOUBLE_DECLINING:
-                addl = new AssetDDL(jtxtAssetNm.getText(), c, s, lf);
-                if (!addl.getErrorMsg().isEmpty()) {
-                    statusMessageLabel.setText(asl.getErrorMsg());
-                    return;
+            case DECLINING_1_5: {
+                String cols[] = {"Year", "Beg.Bal.", "Ann.Dep.", "End Bal."};
+                String[][] table = new String[lf][4];
+                DefaultTableModel mod = new DefaultTableModel(table, cols);
+        
+                jtblSched.setModel(mod);
+                        
+                for (int i=1; i < 4; i++) {
+                    jtblSched.getColumnModel().getColumn(i).setCellRenderer(rend);
                 }
-                for (int i=1; i <= addl.getLife(); i++) {
-                   jtblSched.setValueAt(i, (i-1), 0);
-                   jtblSched.setValueAt(currFormat.format(addl.GetBegBalance(i)), (i-1), 1);
-                   jtblSched.setValueAt(currFormat.format(addl.getAnnDep(i)), (i-1), 2);
-                   jtblSched.setValueAt(currFormat.format(addl.GetEndBalance(i)), (i-1), 3);
-                }
-                break;
-            case DECLINING_1_5:
-                addl15 = new AssetDL15(jtxtAssetNm.getText(), c, s, lf);
-                if (!addl15.getErrorMsg().isEmpty()) {
-                    statusMessageLabel.setText(asl.getErrorMsg());
-                    return;
-                }
-                for (int i=1; i <= addl15.getLife(); i++) {
-                   jtblSched.setValueAt(i, (i-1), 0);
-                   jtblSched.setValueAt(currFormat.format(addl15.GetBegBalance(i)), (i-1), 1);
-                   jtblSched.setValueAt(currFormat.format(addl15.getAnnDep(i)), (i-1), 2);
-                   jtblSched.setValueAt(currFormat.format(addl15.GetEndBalance(i)), (i-1), 3);
+                for (int i=1; i <= a.getLife(); i++) {
+                    jtblSched.setValueAt(i, (i-1), 0);
+                    jtblSched.setValueAt(currFormat.format(a.GetBegBalance(i)), (i-1), 1);
+                    jtblSched.setValueAt(currFormat.format(a.getAnnDep(i)), (i-1), 2);
+                    jtblSched.setValueAt(currFormat.format(a.GetEndBalance(i)), (i-1), 3);
                 }
                 break;
-            default:
-                //Should be unreachable
+            }
+            case SUM_YEARS_DIGITS: {
+                DefaultTableCellRenderer renderCenter = new DefaultTableCellRenderer();
+                
+                
+                
+                
+                String cols[] = {"Year", "<HTML>Remaining<BR>estimated useful<BR>life at beginning of year</HTML>", "SYD", 
+                    "<HTML>Depreciation<BR>Rate</HTML>", "<HTML>Annual<BR>depreciation</HTML>"};
+                String[][] table = new String[lf + 1][5];
+                DefaultTableModel mod = new DefaultTableModel(table, cols);
+        
+                jtblSched.setModel(mod);
+                
+                jtblSched.getTableHeader().setPreferredSize(new Dimension(jtblSched.getPreferredSize().width, 65));
+                ((DefaultTableCellRenderer)jtblSched.getTableHeader().getDefaultRenderer()).setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
+                
+                NumberFormat percentFormat = NumberFormat.getPercentInstance();
+                percentFormat.setMinimumFractionDigits(2);
+                percentFormat.setMaximumFractionDigits(2);
+                        
+                for (int i=3; i < 5; i++) {
+                    jtblSched.getColumnModel().getColumn(i).setCellRenderer(rend);
+                }
+                renderCenter.setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
+                jtblSched.getColumnModel().getColumn(1).setCellRenderer(renderCenter);
+                jtblSched.getColumnModel().getColumn(2).setCellRenderer(renderCenter);
+                
+                for (int i=1; i <= a.getLife(); i++) {
+                    jtblSched.setValueAt(i, (i-1), 0);
+                    jtblSched.setValueAt((lf - (i - 1)),(i-1),1);
+                    jtblSched.setValueAt((lf - (i - 1)) + "/" + ((AssetSYD) a).getSYD(), (i-1), 2);
+                    jtblSched.setValueAt(percentFormat.format(((AssetSYD) a).getAnnDepRate(i)) , (i-1), 3);
+                    jtblSched.setValueAt(currFormat.format(a.getAnnDep(i)), (i-1), 4);
+                }
+                jtblSched.setValueAt("Totals", a.getLife(), 0);
+                jtblSched.setValueAt((a.getLife() * (a.getLife() + 1)) / 2, a.getLife(), 1);
+                jtblSched.setValueAt(percentFormat.format(1.0), a.getLife(), 3);
+                jtblSched.setValueAt(currFormat.format(c - s), a.getLife(), 4);
                 break;
-                 
+            }
         }
+        
     }//GEN-LAST:event_jbtnCalcActionPerformed
 
     private void jbtnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnClearActionPerformed
@@ -497,14 +535,11 @@ public class DepInheritView extends FrameView {
             dm.removeRow(0);
         }
         
-        asset = null;
-        asl = null;
-        addl = null;
-        addl15 = null;
+        a = null;
     }//GEN-LAST:event_jbtnClearActionPerformed
 
     private void jmnuSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmnuSaveActionPerformed
-        if (null == asset) {
+        if (null == a) {
             statusMessageLabel.setText("Cannot save, no depreciation table built.");
             return;
         }
@@ -520,7 +555,7 @@ public class DepInheritView extends FrameView {
                 selectedFile = new File(filePath + ".txt");
             }
             
-            asset.setSave(selectedFile);
+            a.setSave(selectedFile);
         }
         
     }//GEN-LAST:event_jmnuSaveActionPerformed
@@ -539,6 +574,7 @@ public class DepInheritView extends FrameView {
     private javax.swing.JRadioButton jradDDL;
     private javax.swing.JRadioButton jradDDL15;
     private javax.swing.JRadioButton jradSL;
+    private javax.swing.JRadioButton jradSYD;
     private javax.swing.JTable jtblSched;
     private javax.swing.JTextField jtxtAssetNm;
     private javax.swing.JTextField jtxtCost;
